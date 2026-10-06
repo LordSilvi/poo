@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Para Alguien Especial ❤️</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: radial-gradient(circle at center, #1e092b, #0c0214, #030008);
+      overflow-x: hidden;
+    }
+    
+    .font-romantic {
+      font-family: 'Dancing Script', cursive;
+    }
+
+    /* Glassmorphism styling */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+
+    .glow-aura {
+      box-shadow: 0 0 50px rgba(236, 72, 153, 0.2);
+    }
+
+    /* Pulse animation */
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      14% { transform: scale(1.15); }
+      28% { transform: scale(1); }
+      42% { transform: scale(1.15); }
+      70% { transform: scale(1); }
+    }
+
+    .animate-heartbeat {
+      animation: heartbeat 2s infinite ease-in-out;
+    }
+
+    /* Floating animation */
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-10px) rotate(1deg); }
+    }
+
+    .animate-float {
+      animation: float 6s ease-in-out infinite;
+    }
+
+    /* Envelope styling */
+    .envelope-wrapper {
+      perspective: 1000px;
+    }
+
+    .envelope {
+      position: relative;
+      background: #180d28;
+      border: 1px solid rgba(244, 114, 182, 0.3);
+      transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Fullscreen Particles Canvas */
+    #particles-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Custom Scrollbar */
+    .custom-scroll::-webkit-scrollbar {
+      width: 5px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.02);
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: rgba(236, 72, 153, 0.4);
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body class="min-h-screen text-slate-100 flex items-center justify-center p-4 relative">
+
+  <!-- Interactive Particles Canvas -->
+  <canvas id="particles-canvas"></canvas>
+
+  <main class="relative z-10 w-full max-w-xl my-8">
+    
+    <!-- ENVELOPE / SEALED CARD (Initial State) -->
+    <div id="envelope-card" class="glass-card glow-aura rounded-3xl p-8 text-center transition-all duration-700 transform">
+      <div class="w-20 h-20 rounded-full bg-pink-500/10 border border-pink-500/30 flex items-center justify-center mx-auto mb-4 text-pink-400 text-3xl shadow-lg shadow-pink-500/20 animate-heartbeat">
+        <i class="fa-solid fa-envelope-open-text"></i>
+      </div>
+      
+      <span class="text-xs uppercase tracking-widest text-pink-400 font-semibold px-3 py-1 rounded-full bg-pink-500/10 border border-pink-500/20">
+        Mensaje Especial
+      </span>
+
+      <h1 class="text-4xl sm:text-5xl font-romantic text-transparent bg-clip-text bg-gradient-to-r from-pink-300 via-rose-200 to-amber-200 mt-4 mb-2">
+        Tengo algo para ti...
+      </h1>
+
+      <p class="text-slate-300 text-sm sm:text-base max-w-md mx-auto mb-8">
+        Hice esta pequeña sorpresa para recordarte lo especial que eres para mí y compartir algo que siempre me hace pensar en ti.
+      </p>
+
+      <button id="btn-open" class="px-8 py-3.5 rounded-full bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-400 hover:to-rose-400 text-white font-medium text-sm sm:text-base shadow-lg shadow-pink-500/30 transition-all duration-300 hover:scale-105 active:scale-95 flex items-center justify-center space-x-2 mx-auto">
+        <i class="fa-solid fa-heart"></i>
+        <span>Abrir Carta</span>
+      </button>
+    </div>
+
+    <!-- OPENED LETTER CONTENT (Hidden by default) -->
+    <div id="letter-content" class="hidden glass-card glow-aura rounded-3xl p-6 sm:p-10 transition-all duration-700 animate-float opacity-0 transform translate-y-6">
+      
+      <!-- Card Header -->
+      <div class="flex flex-col items-center text-center mb-6">
+        <div class="w-14 h-14 rounded-full bg-pink-500/10 border border-pink-500/30 flex items-center justify-center mb-3 text-pink-400 text-2xl shadow-lg shadow-pink-500/20 animate-heartbeat">
+          <i class="fa-solid fa-heart"></i>
+        </div>
+        <span class="text-xs uppercase tracking-widest text-pink-400 font-semibold px-3 py-1 rounded-full bg-pink-500/10 border border-pink-500/20">
+          Para alguien inigualable
+        </span>
+        <h2 class="text-4xl sm:text-5xl font-romantic text-transparent bg-clip-text bg-gradient-to-r from-pink-300 via-rose-200 to-amber-200 mt-2">
+          Pensando en ti
+        </h2>
+      </div>
+
+      <!-- Romantic Letter Text -->
+      <div class="relative my-6 p-6 rounded-2xl bg-black/30 border border-white/5 space-y-4 max-h-72 overflow-y-auto custom-scroll text-slate-200 text-sm sm:text-base leading-relaxed">
+        <p class="first-letter:text-3xl first-letter:font-romantic first-letter:text-pink-400 first-letter:mr-1">
+          Solo quería tomarme un momento para hacerte saber lo mucho que significas para mí. A veces las palabras cotidianas no alcanzan para explicar la serenidad, la alegría y la motivación que me da saber que estás presente en mi vida.
+        </p>
+        <p>
+          Hay canciones que cobran un sentido totalmente diferente cuando las escucho pensando en ti, porque reflejan exactamente esa bonita coincidencia que fue haber coincidido. Gracias por cada sonrisa, por cada instante y por darme tantos motivos para querer estar cerca de ti.
+        </p>
+        <p>
+          Cada día es una nueva oportunidad para demostrarte lo mucho que te quiero y lo afortunado que me siento de tenerte en mi vida.
+          Tambien hago esto ya que es una froma de expresarme y hacerte saber que te quiero mucho, al igual me gustaria que tu fueras un poco mas cariñosa conmigo.       </p>
+        <p class="text-right text-pink-300 font-romantic text-2xl pt-2">
+          Con todo mi cariño para ti mi niña hermosa ❤️
+        </p>
+      </div>
+
+      <!-- Spotify Embed Container -->
+      <div class="mt-6 rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-black/40 p-1">
+        <iframe 
+          data-testid="embed-iframe" 
+          style="border-radius:12px" 
+          src="https://open.spotify.com/embed/track/3VjnYQbAVQLXbiR9gf1qnD?utm_source=generator&si=973189b2ceba45d8" 
+          width="100%" 
+          height="352" 
+          frameBorder="0" 
+          allowfullscreen="" 
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+          loading="lazy">
+        </iframe>
+      </div>
+
+      <!-- Surprise Button -->
+      <div class="mt-6 text-center">
+        <button id="btn-surprise" class="px-5 py-2.5 rounded-full bg-white/5 hover:bg-pink-500/10 border border-white/10 hover:border-pink-500/30 text-xs sm:text-sm text-pink-200 transition-all duration-300 flex items-center justify-center space-x-2 mx-auto group">
+          <i class="fa-solid fa-sparkles text-amber-300 group-hover:rotate-12 transition-transform"></i>
+          <span>Enviar lluvia de corazones</span>
+        </button>
+      </div>
+
+    </div>
+
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const btnOpen = document.getElementById('btn-open');
+      const envelopeCard = document.getElementById('envelope-card');
+      const letterContent = document.getElementById('letter-content');
+      const btnSurprise = document.getElementById('btn-surprise');
+
+      // Open Letter Event
+      btnOpen.addEventListener('click', () => {
+        // Trigger burst of hearts at button location
+        const rect = btnOpen.getBoundingClientRect();
+        createHeartBurst(rect.left + rect.width / 2, rect.top + rect.height / 2, 35);
+
+        // Hide envelope with animation
+        envelopeCard.classList.add('opacity-0', 'scale-95');
+        
+        setTimeout(() => {
+          envelopeCard.classList.add('hidden');
+          letterContent.classList.remove('hidden');
+          
+          // Smooth reveal of letter content
+          setTimeout(() => {
+            letterContent.classList.remove('opacity-0', 'translate-y-6');
+          }, 50);
+        }, 500);
+      });
+
+      // Canvas Floating Heart Particles Setup
+      const canvas = document.getElementById('particles-canvas');
+      const ctx = canvas.getContext('2d');
+
+      let width = canvas.width = window.innerWidth;
+      let height = canvas.height = window.innerHeight;
+
+      window.addEventListener('resize', () => {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+      });
+
+      const particles = [];
+      const particleCount = 35;
+
+      class HeartParticle {
+        constructor(x, y, isBurst = false) {
+          this.x = x || Math.random() * width;
+          this.y = y || (isBurst ? y : height + Math.random() * 100);
+          this.size = Math.random() * 14 + 8;
+          this.speedY = isBurst ? (Math.random() - 0.5) * 7 : -(Math.random() * 1.2 + 0.4);
+          this.speedX = isBurst ? (Math.random() - 0.5) * 7 : (Math.random() - 0.5) * 0.8;
+          this.opacity = isBurst ? 1 : Math.random() * 0.5 + 0.3;
+          this.color = `hsl(${Math.random() * 30 + 330}, 85%, 65%)`;
+          this.rotation = Math.random() * Math.PI * 2;
+          this.rotSpeed = (Math.random() - 0.5) * 0.05;
+          this.isBurst = isBurst;
+        }
+
+        draw() {
+          ctx.save();
+          ctx.translate(this.x, this.y);
+          ctx.rotate(this.rotation);
+          ctx.globalAlpha = this.opacity;
+          ctx.fillStyle = this.color;
+
+          // Draw Heart Path
+          ctx.beginPath();
+          const topCurveHeight = this.size * 0.3;
+          ctx.moveTo(0, topCurveHeight);
+          ctx.bezierCurveTo(0, 0, -this.size / 2, 0, -this.size / 2, topCurveHeight);
+          ctx.bezierCurveTo(-this.size / 2, (this.size + topCurveHeight) / 2, 0, this.size, 0, this.size);
+          ctx.bezierCurveTo(0, this.size, this.size / 2, (this.size + topCurveHeight) / 2, this.size / 2, topCurveHeight);
+          ctx.bezierCurveTo(this.size / 2, 0, 0, 0, 0, topCurveHeight);
+          ctx.closePath();
+          ctx.fill();
+          ctx.restore();
+        }
+
+        update() {
+          this.x += this.speedX;
+          this.y += this.speedY;
+          this.rotation += this.rotSpeed;
+
+          if (this.isBurst) {
+            this.opacity -= 0.015;
+            this.speedY += 0.06; // gravity effect
+          } else {
+            if (this.y < -50) {
+              this.y = height + 50;
+              this.x = Math.random() * width;
+            }
+          }
+        }
+      }
+
+      // Initial ambient particles
+      for (let i = 0; i < particleCount; i++) {
+        particles.push(new HeartParticle());
+      }
+
+      function createHeartBurst(x, y, amount = 20) {
+        for (let i = 0; i < amount; i++) {
+          particles.push(new HeartParticle(x, y, true));
+        }
+      }
+
+      btnSurprise.addEventListener('click', (e) => {
+        const rect = e.target.getBoundingClientRect();
+        createHeartBurst(rect.left + rect.width / 2, rect.top, 30);
+      });
+
+      // Animation Render Loop
+      function animate() {
+        ctx.clearRect(0, 0, width, height);
+
+        for (let i = particles.length - 1; i >= 0; i--) {
+          particles[i].update();
+          particles[i].draw();
+
+          if (particles[i].isBurst && particles[i].opacity <= 0) {
+            particles.splice(i, 1);
+          }
+        }
+
+        requestAnimationFrame(animate);
+      }
+
+      animate();
+    });
+  </script>
+</body>
+</html>
